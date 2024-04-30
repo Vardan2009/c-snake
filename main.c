@@ -4,15 +4,17 @@
 #include <conio.h>
 #include <windows.h>
 
+#define W 20
+#define H 10
+#define false 0
+#define true 1
+#define MAX_SNAKE_LEN 50
 #define clrscr() system("cls")
-
-
 
 typedef struct Point
 {
     int x,y;
 } Point;
-
 
 Point create_point(int x, int y)
 {
@@ -22,21 +24,10 @@ Point create_point(int x, int y)
     return p;
 }
 
-#define MAX_SNAKE_LEN 50
-
-#define W 20
-#define H 10
-
-#define false 0
-#define true 1
-
 Point snake_vectors[MAX_SNAKE_LEN];
 int snake_len;
-
 int score;
-
 Point food;
-
 int running = true;
 
 int is_safe_point_from_snake(int x,int y,int checkfrom)
@@ -49,7 +40,6 @@ int is_safe_point_from_snake(int x,int y,int checkfrom)
     return true;
 }
 
-
 void random_food_pos()
 {
     int rx = 1;
@@ -60,7 +50,6 @@ void random_food_pos()
      ry = 1 + rand() % (H-2);
     }
     while(!is_safe_point_from_snake(rx,ry,0));
-
     food.x = rx;
     food.y = ry;
 }
@@ -68,17 +57,12 @@ void random_food_pos()
 void init_snake()
 {
     srand(time(NULL));
-
     snake_len = 1;
-    
     score = 1;
-
     Point start;
     start.x = 2;
     start.y = 2;
-    
     random_food_pos();
-
     snake_vectors[0] = start;
 }
 
@@ -96,17 +80,14 @@ void Draw()
             else
             {
                 int flag = 0;
-                
                 if(food.x == x && food.y == y)
                 {
                     printf("$");
                     continue;
                 }
-
                 for(int sn = 0;sn<snake_len;sn++)
                 {
                     Point p = snake_vectors[sn];
-                    //printf("%d, %d\n",p.x,p.y);
                     if(p.x == x && p.y == y)
                     {
                         if(sn == 0){
@@ -120,13 +101,13 @@ void Draw()
                     }
                 }
                 if(flag == 2){
-                        printf("&");
+                    printf("&");
                 }
                 else if (flag == 1){
-                        printf("*");
+                    printf("*");
                 }
                 else{
-                        printf(" ");
+                    printf(" ");
                 }
             }
         }
@@ -167,21 +148,15 @@ void move_snake(int dX,int dY)
     new_pos.x += dX;
     new_pos.y += dY;
     new_snake[0] = new_pos;
-    
     for(int i =0;i<snake_len;i++)
     {
         snake_vectors[i] = new_snake[i];
     }
-
-    //snake_vectors = new_snake;
-
     if(snake_out_of_bounds(new_pos) || !is_safe_point_from_snake(new_pos.x,new_pos.y,1))
     {
-        //game over dumbass
         running = false;
         return;
     }
-
     if(new_pos.x == food.x && new_pos.y == food.y)
     {
         add_snake_node();
@@ -189,7 +164,7 @@ void move_snake(int dX,int dY)
     }
 }
 
-int lastx = 1,lasty = 0;
+int lastx = 1, lasty = 0;
 
 int main()
 {
@@ -221,9 +196,9 @@ int main()
                 running = false;
                 break;
         }
-        }
-        move_snake(lastx,lasty);
-        Draw();
-        Sleep(100);
+     }
+     move_snake(lastx,lasty);
+     Draw();
+     Sleep(100);
     }
 }
